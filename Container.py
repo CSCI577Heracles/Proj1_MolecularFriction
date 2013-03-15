@@ -1,91 +1,67 @@
 import numpy as np
+from Vectorz import Vector_3D
+from math import sqrt
 
 
 class Container(object):
 
     def __init__(self):
-        self._x = np.array([])
-        self._y = np.array([])
-        self._z = np.array([])
+        self._p = np.array([])  # these are the particle locations
+        self.v = np.array([])   # particle velocities
+        self.a = np.array([])   # particle accelerations
+        self.m = np.array([])   # particle masses
+        self.L = Vector_3D(0., 0., 0.)
+        self.vBounds = np.vectorize(self.enforceBoundary)
+        self.vRmNan = np.vectorize(self.rmNan)
+        self.vR_mag_calc = np.vectorize(self.r_mag_calc)
 
-        self.vx = np.array([])
-        self.vy = np.array([])
-        self.vz = np.array([])
+    def enforceBoundary(self, vector3d):
+        if vector3d.x > self.L.x / 2.:
+            vector3d.x -= self.L.x
+        elif vector3d.x < - self.L.x / 2.:
+            vector3d.x += self.L.x
 
-        self.ax = np.array([])
-        self.ay = np.array([])
-        self.az = np.array([])
+        if vector3d.y > self.L.y / 2.:
+            vector3d.y -= self.L.y
+        elif vector3d.y < - self.L.y / 2.:
+            vector3d.y += self.L.y
 
-        self.Lx = 0.
-        self.Ly = 0.
-        self.Lz = 0.
+        if vector3d.z > self.L.z / 2.:
+            vector3d.z -= self.L.z
+        elif vector3d.z < - self.L.z / 2.:
+            vector3d.z += self.L.z
+        return vector3d
+
+    def rmNan(self, vector3d):
+        vector3d.x = np.nan_to_num(vector3d.x)
+        vector3d.y = np.nan_to_num(vector3d.y)
+        vector3d.z = np.nan_to_num(vector3d.z)
+        return vector3d
+
+    def r_mag_calc(self, vector3d):
+        return sqrt(vector3d.x ** 2 + vector3d.y ** 2 + vector3d.z ** 2)
+
 
     @property
-    def x(self):
-        return self._x
+    def p(self):
+        return self._p
 
-    @x.setter
-    def x(self, x_prime):
-        self._x = x_prime % self.Lx
+    @p.setter
+    def p(self, p):
+        self._p = p % self.L
 
-    @property
-    def y(self):
-        return self._y
+    def add_particle(self, p, v, m):
+        self.p = np.hstack((self.p, p))
+        self.v = np.hstack((self.v, v))
+        self.m = np.hstack((self.m, m))
 
-    @y.setter
-    def y(self, y_prime):
-        self._y = y_prime % self.Ly
-
-    @property
-    def z(self):
-        return self._z
-
-    @z.setter
-    def z(self, z_prime):
-        #self._z = z_prime % self.Lz
-        self._z = z_prime
-
-    def add_particle(self, x, y, z, vx, vy, vz):
-        self.x = np.hstack((self.x, x))
-        print "x: "
-        print self.x
-        self.y = np.hstack((self.y, y))
-        self.z = np.hstack((self.z, z))
-
-        self.vx = np.hstack((self.vx, vx))
-        self.vy = np.hstack((self.vy, vy))
-        self.vz = np.hstack((self.vz, vz))
-        #self.vx = vx
-        #self.vy = vy
-        #self.vz = vz
-
-    def dx(self):
-        #print "x: "
-        #print self.x
-        xtemp = np.tile(self.x, (self.x.size,1))
-        #print "xtemp"
-        #print xtemp
-        dx = xtemp - xtemp.T
-        dx[dx > self.Lx / 2.] -= self.Lx
-        dx[dx < -self.Lx / 2.] += self.Lx
-        #print "dx"
-        #print dx
-        return dx
-
-    def dy(self):
-        ytemp = np.tile(self.y, (self.y.size, 1))
-        dy = ytemp - ytemp.T
-        dy[dy > self.Ly / 2.] -= self.Ly
-        dy[dy < -self.Ly / 2.] += self.Ly
-        return dy
-
-    def dz(self):
-        ztemp = np.tile(self.z, (self.z.size, 1))
-        dz = ztemp - ztemp.T
-        dz[dz > self.Lz / 2.] -= self.Lz
-        dz[dz < -self.Lz / 2.] += self.Lz
-        return dz
+    def d(self):  # return distance matrix
+        ptemp = np.tile(self.p, (self.p.size, 1))
+        return self.vBounds(ptemp - ptemp.T)
 
     def dr2(self):
-    	r_mag = self.dx() ** 2 + self.dy() ** 2 + self.dz() ** 2
+        r_mag = self.dx() ** 2 + self.dy() ** 2 + self.dz() ** 2
         return np.nan_to_num(r_mag)
+
+    def dr(self):
+        return self.vR_mag_calc(self.d())

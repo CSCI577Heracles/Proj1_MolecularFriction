@@ -1,8 +1,10 @@
 import numpy as np
 import Container
 from math import sqrt
+from Vectorz import Vector_3D
 import math
 import random
+
 
 class ContainerInitializer(object):
 
@@ -29,6 +31,11 @@ class ContainerInitializer(object):
 
             c.add_particle(1., 5., 0., 0.4, 0., 0.)
             c.add_particle(3., 5., 0., -0.4, 0., 0.)
+
+        elif init_string == 'two_vector3d':
+            c.L = Vector_3D(10., 10., 0.)
+            c.add_particle(Vector_3D(1., 5., 0), Vector_3D(0.4, 0., 0.), 1.)
+            c.add_particle(Vector_3D(3., 5., 0), Vector_3D(-0.4, 0., 0.), 1.)
 
         elif init_string == 'eight':
             lx = 10.
