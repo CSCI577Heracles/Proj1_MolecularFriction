@@ -59,9 +59,9 @@ class Container(object):
         ptemp = np.tile(self.p, (self.p.size, 1))
         return self.vBounds(ptemp - ptemp.T)
 
-    def dr2(self):
-        r_mag = self.dx() ** 2 + self.dy() ** 2 + self.dz() ** 2
-        return np.nan_to_num(r_mag)
+    #def dr2(self):
+    #    r_mag = self.dx() ** 2 + self.dy() ** 2 + self.dz() ** 2
+    #    return np.nan_to_num(r_mag)
 
     def dr(self):
         return self.vR_mag_calc(self.d())

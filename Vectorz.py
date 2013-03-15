@@ -1,6 +1,7 @@
 import math
 import numpy as np
 
+
 class Vector_3D:
 
     def __class__(self):

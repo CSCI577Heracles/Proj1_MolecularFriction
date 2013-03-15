@@ -82,6 +82,8 @@ while count < NUM_TIMESTEPS:
     count += 1
 time = np.linspace(0, NUM_TIMESTEPS*DELTA_T, NUM_TIMESTEPS)
 
+# TODO: pe, ke, pressure plots
+
 #print "time:"
 #print time
 #print "---------"
