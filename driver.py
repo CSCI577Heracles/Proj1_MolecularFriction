@@ -6,9 +6,9 @@ import ContainerInitializer
 import numpy as np
 import matplotlib.pyplot as plt
 
-FRAME_RATE = 10
+FRAME_RATE = 1
 DELTA_T = 0.01
-NUM_TIMESTEPS = 5000
+NUM_TIMESTEPS = 100
 
 
 def circle(xy, radius, color="lightsteelblue", facecolor="green", alpha=.6, ax=None):
@@ -24,7 +24,7 @@ def circle(xy, radius, color="lightsteelblue", facecolor="green", alpha=.6, ax=N
     e.set_alpha(alpha)
 
 
-c = ContainerInitializer.ContainerInitializer("eight_vector3d").getContainer()
+c = ContainerInitializer.ContainerInitializer("proj1_vector3D").getContainer()
 f = Force.Force(c)
 i = Integrator.Integrator(DELTA_T, f)
 
@@ -32,20 +32,26 @@ state_list = []
 pe_list = []
 ke_list = []
 pressure_list = []
-count = 0
+count = 1
 
 plt.figure(1)
 plt.clf()
 plt.ion()
 plt.xlim((0, c.L.x))
 plt.ylim((0, c.L.y))
+#plt.xlim((0, 20.))
+#plt.ylim((0, 20.))
 plt.grid()
 ax = plt.gca()
 plt.show()
 
+print "d at time 0.0"
+print c.d()
+
 while count < NUM_TIMESTEPS:
     #print "--------- BEGIN TIMESTEP " + str(count) + " --------------"
-    i.integrate()
+    i.integrate(DELTA_T * count)
+    #i.cheat_i()
     #pe_list.append(f.pe())
     #ke_list.append(f.ke())
     #pressure_list.append(f.pressure())
@@ -61,6 +67,10 @@ while count < NUM_TIMESTEPS:
     #c.Lx -= 0.01
     #c.Ly -= 0.01
 
+    print "velocity of last p at time: " + str(DELTA_T*count)
+    print c.v[-1]
+    print "accel at time: " + str(DELTA_T * count)
+    print c.a
     if count % FRAME_RATE == 0:
         #print "c.x"
         #print c.x
@@ -70,6 +80,7 @@ while count < NUM_TIMESTEPS:
         for particle in range(len(c.m)):
             circle((c.p[particle].x, c.p[particle].y), radius=0.5*2**(1/6.), ax=ax, facecolor='green')
         plt.draw()
+        #plt.savefig('heracles_sled.png')
             #part_x = 0.
             #part_y = 0.
             #circle((c.x[particle], c.y[particle]), radius = 0.5*2**(1/6.), ax=ax, facecolor='green')
@@ -80,6 +91,7 @@ while count < NUM_TIMESTEPS:
             #plt.plot(c.x[particle], c.y[particle], 'o')
         #plt.show()
     count += 1
+
 time = np.linspace(0, NUM_TIMESTEPS*DELTA_T, NUM_TIMESTEPS)
 
 # TODO: pe, ke, pressure plots

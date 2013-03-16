@@ -2,6 +2,7 @@ import numpy as np
 import Container
 from math import sqrt
 from Vectorz import Vector_3D
+from scipy.linalg import toeplitz
 import math
 import random
 
@@ -146,36 +147,37 @@ class ContainerInitializer(object):
         #        print c.y
         
         elif init_string == 'proj1_vector3D':
-        	# perhaps cFloor and cSled should be globals, or part of the container or something?
-        	cFloor = 100
-        	cSled = 13
-        	a = 2 ** (1 / 6)
-        	Lx = 100 * a
-        	Ly = 20 * a
-        	c.L = Vector_3D(Lx, Ly, 0.)
-        	
-        	# set up floor values
-        	xFloor = np.linspace(a / 2, Lx - a / 2, cFloor)
-        	yFloor = 1.
-        	
-        	# set up the bottom of the sled
-        	xSledBot = np.linspace(a, (2 * np.ceil(cSled) - 1) * a, np.ceil(cSled))
-        	ySledBot = 1 + a
-        	
-        	# set up the top of the sled
-        	xSledTop = np.linspace(2 * a, 2 * np.floor(cSled) * a, np.floor(cSled))
-        	ySledTop = 1 + a + np.sqrt(3) * a    	
-        	
-        	# add all the particles to the container
-        	for i in range(cFloor):
-        		c.add_particle(xFloor[i], yFloor, Vector_3D(0., 0., 0.), Vector_3D(0., 0., 0.), 1.)
-        	
-        	for i in range(cSled):
-        		if i % 2:
-        			c.add_particle(xSledTop[(i - 1)/2], ySledTop, Vector_3D(0., 0., 0.), Vector_3D(0., 0., 0.), 1.)
-        		else:
-        			c.add_particle(xSledBot[i / 2], ySledBot, Vector_3D(0., 0., 0.), Vector_3D(0., 0., 0.), 1.)
+        # perhaps cFloor and cSled should be globals, or part of the container or something?
+            c.cFloor = 100
+            c.cSled = 13
+            a = 2 ** (1 / 6.)
+            Lx = 100 * a
+            Ly = 20 * a
+            c.L = Vector_3D(Lx, Ly, 0.)
+            # set up floor values
 
+            xFloor = np.linspace(a / 2, Lx - a / 2, c.cFloor)
+            yFloor = 1.
+            # set up the bottom of the sled
+            xSledBot = np.linspace(a, (2 * np.ceil(c.cSled) - 1) * a, np.ceil(c.cSled))
+            ySledBot = 1 + a
+            # set up the top of the sled
+            xSledTop = np.linspace(2 * a, 2 * np.floor(c.cSled) * a, np.floor(c.cSled))
+            ySledTop = 1 + a + np.sqrt(3) * a
+            # add all the particles to the container
+            for i in range(c.cFloor):
+                c.add_particle(Vector_3D(xFloor[i], yFloor, 0.), Vector_3D(0., 0., 0.), 1.)
+            for i in range(c.cSled):
+                if i % 2:
+                    c.add_particle(Vector_3D(xSledTop[(i - 1)/2], ySledTop, 0.),  Vector_3D(0., 0., 0.), 1.)
+                else:
+                    c.add_particle(Vector_3D(xSledBot[i / 2], ySledBot, 0.), Vector_3D(0., 0., 0.), 1.)
+
+            c.xInit = c.p[-1].x
+            x = np.zeros(c.cSled)
+            x[1] = 1.
+            x[2] = 1.
+            c.sledMatrix = toeplitz(x)
         self.c = c
 
 

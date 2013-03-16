@@ -14,6 +14,11 @@ class Container(object):
         self.vBounds = np.vectorize(self.enforceBoundary)
         self.vRmNan = np.vectorize(self.rmNan)
         self.vR_mag_calc = np.vectorize(self.r_mag_calc)
+        self.xInit = 0.
+        self.cFloor = 0.
+        self.cSled = 0.
+
+
 
     def enforceBoundary(self, vector3d):
         if vector3d.x > self.L.x / 2.:
@@ -59,9 +64,18 @@ class Container(object):
         ptemp = np.tile(self.p, (self.p.size, 1))
         return self.vBounds(ptemp.T - ptemp)
 
+    def d_sled(self):
+        ptemp = np.tile(self.p[self.cFloor:], (self.p.size - self.cFloor, 1))
+        return self.vBounds(ptemp.T - ptemp)
+
     #def dr2(self):
     #    r_mag = self.dx() ** 2 + self.dy() ** 2 + self.dz() ** 2
     #    return np.nan_to_num(r_mag)
 
     def dr(self):
         return self.vR_mag_calc(self.d())
+
+    def dr_sled(self):
+        ptemp = np.tile(self.p[self.cFloor:], (self.p.size - self.cFloor, 1))
+        dtemp = self.vBounds(ptemp.T - ptemp)
+        return self.vR_mag_calc(dtemp)

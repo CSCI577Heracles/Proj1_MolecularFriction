@@ -1,12 +1,13 @@
 import numpy as np
 import math
+from Vectorz import Vector_3D
 
 
 class Force(object):
 
     def __init__(self, c):
         self.c = c
-
+        self.c.springMatrix = self.c.d_sled()
     # TODO: pe calculation
     #def pe(self):
     #    eps = 1.
@@ -75,29 +76,53 @@ class Force(object):
         r_hat = d / dr
 
         f = r_hat * (24 * eps) / dr * (2 * (sig / dr) ** 12 - (sig / dr) ** 6)
-        f = self.c.vRmNan(-f)
+        f = self.c.vRmNan(f)
         return np.sum(f, axis=1) / m
         
     # acceleration due to pulling force
     # do we need to pass in the time? where is it located?
     # need to keep track of initial position (xInit) somewhere 
-    def aX(self, cFloor, cSled, t, xInit):
-        p = self.c.p() # only want the cFloorth index :/
-        x = p[cFloor].x
+
+    def aX(self, t):
+        p = self.c.p[-1]  # only want the cFloorth index :/
+        #x = p[cFloor].x
         
-        return 10 * (0.1 * t - (x - xInit))
+        return Vector_3D(10 * (0.1 * t - (p.x - self.c.xInit)), 0., 0.)
     	
     # acceleration due to dragging force
-    def aD(self, cFloor, cSled):
-        p = self.c.p() # only want the cFloorth index :/
-        x = p[cFloor].x
-        y = p[cFloor].y
-        v = self.c.v[cFloor]
-        dr = 1. #TODO I have no idea what this dr is supposed to be
+
+    def aD(self):
+        p = self.c.p[self.c.cFloor] # only want the cFloorth index :/
+        x = p.x
+        y = p.y
+        v = self.c.v[self.c.cFloor]
+        dr = p.magnitude()  # TODO I have no idea what this dr is supposed to be
     
-        return -10 * (v.x * x + v.y * y) / dr # divide by mass as well here
-		
+        return Vector_3D(-10 * (v.x * x + v.y * y) / dr, 0., 0.)  # divide by mass as well here
+
     # acceleration due to spring force
-    def aS(self, cSled):
+    def aS(self, a=2 ** (1 / 6.)):
+        #tempa = (self.c.d_sled() - Vector_3D(2 * a, 2 * a, 0.)) * -500
+        tempa = (self.c.d_sled() - self.c.springMatrix) * -500
+        tempa = tempa * self.c.sledMatrix
+        return np.sum(tempa, axis=1) / self.c.m[self.c.cFloor:]
+
+    def a(self, t):
+        # TODO: add up all forces and return new accelerations
+        a = np.zeros(self.c.cFloor + self.c.cSled)
+
+        a = self.aLJ() + a
+
+        a[self.c.cFloor] += self.aD()
+
+        a[-1] += self.aX(t)
+
+        a[self.c.cFloor:] += self.aS()
+
+        a[:self.c.cFloor] = Vector_3D(0., 0., 0.)
+        return a
+
+
+
 	
 

@@ -53,13 +53,19 @@ class Vector_3D:
         return Vector_3D(x_mod, y_mod, z_mod)
 
     def __add__(self, other):
-        return Vector_3D(self.x+other.x, self.y+other.y, self.z+other.z)
+        if isinstance(other, Vector_3D):
+            return Vector_3D(self.x+other.x, self.y+other.y, self.z+other.z)
+        else:
+            return Vector_3D(self.x + other, self.y + other, self.z + other)
 
     def __sub__(self, other):
-        x_sub = self.x - other.x
-        y_sub = self.y - other.y
-        z_sub = self.z - other.z
-        return Vector_3D(x_sub, y_sub, z_sub)
+        if isinstance(other, Vector_3D):
+            x_sub = self.x - other.x
+            y_sub = self.y - other.y
+            z_sub = self.z - other.z
+            return Vector_3D(x_sub, y_sub, z_sub)
+        else:
+            return Vector_3D(self.x - other, self.y - other, self.z - other)
 
     def __neg__(self):
         return Vector_3D(-self.x, -self.y, -self.z)
@@ -83,14 +89,9 @@ class Vector_3D:
         pow_z = self.z ** power
         return Vector_3D(pow_x, pow_y, pow_z)
 
-    def magnitude_of_dist(self, r):
-        return r.x ** 2 + r.y ** 2 + r.z ** 2
-
     def magnitude(self):
         return math.sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)
 
     def raw_mag(self, r):
         return r.x ** 2 + r.y ** 2 + r.z ** 2
 
-    def magitude_of_matrix(self, r):
-        return r.x ** 2 + r.y ** 2 + r.z ** 2
