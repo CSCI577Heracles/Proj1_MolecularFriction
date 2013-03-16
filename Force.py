@@ -74,7 +74,7 @@ class Force(object):
         r_hat = d / dr
 
         f = r_hat * (24 * eps) / dr * (2 * (sig / dr) ** 12 - (sig / dr) ** 6)
-        f = self.c.vRmNan(-f)
+        f = self.c.vRmNan(f)
         return np.sum(f, axis=1)
 
 

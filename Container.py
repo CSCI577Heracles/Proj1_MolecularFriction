@@ -57,7 +57,7 @@ class Container(object):
 
     def d(self):  # return distance matrix
         ptemp = np.tile(self.p, (self.p.size, 1))
-        return self.vBounds(ptemp - ptemp.T)
+        return self.vBounds(ptemp.T - ptemp)
 
     #def dr2(self):
     #    r_mag = self.dx() ** 2 + self.dy() ** 2 + self.dz() ** 2
