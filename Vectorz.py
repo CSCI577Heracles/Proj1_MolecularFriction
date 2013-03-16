@@ -21,8 +21,8 @@ class Vector_3D:
             y_product = self.y * other.y
             z_product = self.z * other.z
             return Vector_3D(x_product, y_product, z_product)
-        #elif isinstance(other, int) or isinstance(other, float):
-        else:
+        elif isinstance(other, int) or isinstance(other, float):
+        #else:
             x_product = self.x*other
             y_product = self.y*other
             z_product = self.z*other
@@ -78,32 +78,19 @@ class Vector_3D:
             return Vector_3D(x_div, y_div, z_div)
 
     def __pow__(self, power):
-        pow_x = self.x**power
-        pow_y = self.y**power
-        pow_z = self.z**power
+        pow_x = self.x ** power
+        pow_y = self.y ** power
+        pow_z = self.z ** power
         return Vector_3D(pow_x, pow_y, pow_z)
 
     def magnitude_of_dist(self, r):
-        # distance boundary conditions are enforced here
-        #if r.x > self.boundVector.x / 2.:
-        #    r.x -= self.boundVector.x
-        #if r.x < -self.boundVector.x / 2.:
-        #    r.x += self.boundVector.x
-        #if r.y > self.boundVector.y / 2.:
-        #    r.y -= self.boundVector.y
-        #if r.y < -self.boundVector.y / 2.:
-        #    r.y += self.boundVector.y
-        #if r.z > self.boundVector.z / 2.:
-        #    r.z -= self.boundVector.z
-        #if r.z < -self.boundVector.z / 2.:
-        #    r.z += self.boundVector.z
-        return (r.x**2 + r.y**2 + r.z**2)
+        return r.x ** 2 + r.y ** 2 + r.z ** 2
 
     def magnitude(self):
-        return math.sqrt(self.x**2 + self.y**2 + self.z**2)
+        return math.sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)
 
     def raw_mag(self, r):
-        return r.x**2 + r.y**2 + r.z**2
+        return r.x ** 2 + r.y ** 2 + r.z ** 2
 
-    def magitude_of_matrix(self):
-        return (r.x**2 + r.y**2 + r.z**2)
+    def magitude_of_matrix(self, r):
+        return r.x ** 2 + r.y ** 2 + r.z ** 2
