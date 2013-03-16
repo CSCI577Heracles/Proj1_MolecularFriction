@@ -64,7 +64,8 @@ class Force(object):
     #    pt = px + py + pz
     #    return 1 / (d * N * self.ke()) * np.sum(pt)
 
-    def a(self, eps=1., sig=1.):
+	# acceleration due to Lennard-Jones forces
+    def aLJ(self, eps=1., sig=1.):
 
         d = self.c.d()
         m = self.c.m.copy()
@@ -75,6 +76,28 @@ class Force(object):
 
         f = r_hat * (24 * eps) / dr * (2 * (sig / dr) ** 12 - (sig / dr) ** 6)
         f = self.c.vRmNan(-f)
-        return np.sum(f, axis=1)
-
+        return np.sum(f, axis=1) / m
+        
+    # acceleration due to pulling force
+    # do we need to pass in the time? where is it located?
+    # need to keep track of initial position (xInit) somewhere 
+    def aX(self, cFloor, cSled, t, xInit):
+        p = self.c.p() # only want the cFloorth index :/
+        x = p[cFloor].x
+        
+        return 10 * (0.1 * t - (x - xInit))
+    	
+    # acceleration due to dragging force
+    def aD(self, cFloor, cSled):
+        p = self.c.p() # only want the cFloorth index :/
+        x = p[cFloor].x
+        y = p[cFloor].y
+        v = self.c.v[cFloor]
+        dr = 1. #TODO I have no idea what this dr is supposed to be
+    
+        return -10 * (v.x * x + v.y * y) / dr # divide by mass as well here
+		
+    # acceleration due to spring force
+    def aS(self, cSled):
+	
 
