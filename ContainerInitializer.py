@@ -37,6 +37,19 @@ class ContainerInitializer(object):
             c.add_particle(Vector_3D(1., 5., 0), Vector_3D(0.4, 0., 0.), 1.)
             c.add_particle(Vector_3D(3., 5., 0), Vector_3D(-0.4, 0., 0.), 1.)
 
+        elif init_string == 'eight_vector3d':
+            c.L = Vector_3D(10., 10., 0)
+            dist = c.L.x / 5.
+            vel = dist / 5.
+            c.add_particle(Vector_3D(-dist+5,0.+5, 0.), Vector_3D(vel,0.,0.), 1.)
+            c.add_particle(Vector_3D(dist+5,0.+5,0.), Vector_3D(-vel,0.,0.), 1.)
+            c.add_particle(Vector_3D(0.+5,dist+5,0.) , Vector_3D(0.,-vel,0.), 1.)
+            c.add_particle(Vector_3D(0.+5,-dist+5,0.) , Vector_3D(0.,vel,0.), 1.)
+            c.add_particle(Vector_3D(dist/sqrt(2)+5,dist/sqrt(2)+5,0.) , Vector_3D(-vel/sqrt(2),-vel/sqrt(2),0.), 1.)
+            c.add_particle(Vector_3D(-dist/sqrt(2)+5,dist/sqrt(2)+5,0.) , Vector_3D(vel/sqrt(2),-vel/sqrt(2),0.), 1.)
+            c.add_particle(Vector_3D(-dist/sqrt(2)+5,-dist/sqrt(2)+5,0.), Vector_3D(vel/sqrt(2),vel/sqrt(2),0.), 1.)
+            c.add_particle(Vector_3D(dist/sqrt(2)+5,-dist/sqrt(2)+5,0.), Vector_3D(-vel/sqrt(2),vel/sqrt(2),0.), 1.)
+
         #elif init_string == 'eight':
         #    lx = 10.
         #    ly = 10.

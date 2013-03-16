@@ -24,7 +24,7 @@ def circle(xy, radius, color="lightsteelblue", facecolor="green", alpha=.6, ax=N
     e.set_alpha(alpha)
 
 
-c = ContainerInitializer.ContainerInitializer("two_vector3d").getContainer()
+c = ContainerInitializer.ContainerInitializer("eight_vector3d").getContainer()
 f = Force.Force(c)
 i = Integrator.Integrator(DELTA_T, f)
 
