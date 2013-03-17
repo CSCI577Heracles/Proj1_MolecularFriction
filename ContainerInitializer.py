@@ -178,6 +178,7 @@ class ContainerInitializer(object):
             x[1] = 1.
             x[2] = 1.
             c.sledMatrix = toeplitz(x)
+            c.springMatrix = c.d_sled()
         self.c = c
 
 

@@ -6,9 +6,9 @@ import ContainerInitializer
 import numpy as np
 import matplotlib.pyplot as plt
 
-FRAME_RATE = 1
+FRAME_RATE = 10
 DELTA_T = 0.01
-NUM_TIMESTEPS = 100
+NUM_TIMESTEPS = 5000
 
 
 def circle(xy, radius, color="lightsteelblue", facecolor="green", alpha=.6, ax=None):
@@ -37,16 +37,16 @@ count = 1
 plt.figure(1)
 plt.clf()
 plt.ion()
-plt.xlim((0, c.L.x))
-plt.ylim((0, c.L.y))
-#plt.xlim((0, 20.))
-#plt.ylim((0, 20.))
+#plt.xlim((0, c.L.x))
+#plt.ylim((0, c.L.y))
+plt.xlim((0, 20.))
+plt.ylim((0, 20.))
 plt.grid()
 ax = plt.gca()
 plt.show()
 
-print "d at time 0.0"
-print c.d()
+print "p at time 0.0"
+print c.p
 
 while count < NUM_TIMESTEPS:
     #print "--------- BEGIN TIMESTEP " + str(count) + " --------------"
@@ -67,20 +67,23 @@ while count < NUM_TIMESTEPS:
     #c.Lx -= 0.01
     #c.Ly -= 0.01
 
-    print "velocity of last p at time: " + str(DELTA_T*count)
-    print c.v[-1]
-    print "accel at time: " + str(DELTA_T * count)
-    print c.a
     if count % FRAME_RATE == 0:
         #print "c.x"
         #print c.x
         #print "c.y"
         #print c.y
 
+        print "velocity at time: " + str(DELTA_T*count)
+        print c.v
+        print "accel at time: " + str(DELTA_T * count)
+        print c.a
+        print "p at time: " + str(DELTA_T*count)
+        print c.p
+
         for particle in range(len(c.m)):
             circle((c.p[particle].x, c.p[particle].y), radius=0.5*2**(1/6.), ax=ax, facecolor='green')
         plt.draw()
-        #plt.savefig('heracles_sled.png')
+        plt.savefig('heracles_sled.png')
             #part_x = 0.
             #part_y = 0.
             #circle((c.x[particle], c.y[particle]), radius = 0.5*2**(1/6.), ax=ax, facecolor='green')
