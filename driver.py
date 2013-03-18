@@ -2,6 +2,7 @@ import Container
 import Force
 import Integrator
 import ContainerInitializer
+import Animation
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -37,6 +38,7 @@ pressure_list = []
 f_x_list = []
 v_x_list = []
 avg_vx_list = []
+positions = []
 
 count = 1
 
@@ -58,6 +60,7 @@ while count < NUM_TIMESTEPS:
     #print "--------- BEGIN TIMESTEP " + str(count) + " --------------"
     i.integrate(DELTA_T * count)
 
+    positions.append(c.p)
     #f_x_list.append(f.aX(DELTA_T * count).x)
     #v_x_list.append(c.v[-1].x)
     avg_vx_list.append(c.avg_sled_v_x())
@@ -179,4 +182,4 @@ print v_x_list
 # plt.savefig('prob3_pressure.png')
 # plt.show(block=True)
 
-
+Animation.show_positions(positions)
