@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import math
 
 FRAME_RATE = 1
-DELTA_T = 0.05
+DELTA_T = 0.01
 NUM_TIMESTEPS = 10
 
 
@@ -143,6 +143,21 @@ print f_x_list
 print "-------"
 print v_x_list
 
+#plt.clf()
+#plt.plot(time, f_x_list)
+##plt.ylabel('Pulling Force')
+#plt.xlabel('Time Units')
+#plt.title('Pulling Force_x Due To Spring On Right Most Atom In Sled')
+#plt.savefig('f_x_heracles.png')
+#plt.show(block=True)
+
+#plt.clf()
+#plt.plot(time, v_x_list)
+#plt.ylabel('Velocity')
+#plt.xlabel('Time Units')
+#plt.title('Velocity_x Of Right Most Atom In Sled')
+#plt.savefig('v_x_heracles.png')
+#plt.show(block=True)
 #print "time:"
 #print time
 #print "---------"
@@ -183,4 +198,4 @@ print v_x_list
 # plt.show(block=True)
 
 print 'Starting animation'
-Animation.show_positions(positions, DELTA_T, NUM_TIMESTEPS, FRAME_RATE)
+Animation.show_positions(positions, DELTA_T, NUM_TIMESTEPS, FRAME_RATE, save_file_path='sled_movie')

@@ -95,7 +95,7 @@ def show_positions(positions, dt, num_forward_frames, frame_show_modulus=1,  sav
     frames = int(num_total_frames / frame_show_modulus)
     anim = FuncAnimation(fig, next_frame, frames=frames, interval=dt, blit=True, init_func=init)
     if save_animation:
-        anim.save(save_file_path + '.avi', fps=30)
+        anim.save(save_file_path + '.mp4', fps=30)
     try:
         pl.show()
     except:  # in true python style, ignore weird Tk error when closing plot window
