@@ -103,6 +103,53 @@ def show_positions(positions, dt, num_forward_frames, frame_show_modulus=1,  sav
     pl.clf()  # may not be necessary
 
 
+def show_positions_live(init_positions, next_fn, dt, frame_show_modulus=1):
+    """
+    :type init_positions: nparray of Vector3D
+    """
+    particle_radius = 2**(1.0/6)
+    figsize = (12, 6)
+    plot_title = 'Molec Dyn Friction Simulation'
+
+    xlim = (0, 20)  # (np.min(axs)-1, np.max(axs)+1)
+    ylim = (0, 8)  # (np.min(ays)-1, np.max(ays)+1)
+
+    fig = pl.figure(figsize=figsize)
+    ax = pl.axes(xlim=xlim, ylim=ylim)  # necessary because initial plot is too zoomed in
+    ax.set_aspect('equal')  # NOTE: This can make the plot look squished if figsize isn't wide enough
+    pl.title(plot_title, fontsize=16)
+    pl.xlabel('X Position')
+    pl.ylabel('Y Position')
+
+    ## (Kevin) Pre initializing is necessary I guess
+    circles = []
+    for x, y, z in [(v.x, v.y, v.z) for v in init_positions]:
+        e = get_nice_circle(x, y, 0.5*particle_radius)
+        e.set_facecolor('green')
+        circles.append(ax.add_patch(e))
+
+    # init fn seems to prevent 'ghosting' of first-plotted data
+    def init():
+        """initialize animation"""
+        for c in circles:
+            c.center = (-1, -1)  # hide (hopefully) off-screen
+        return circles
+
+
+    def next_frame(ix_frame):
+        ix_frame *= frame_show_modulus
+        positions = next_fn(ix_frame)
+        for (x, y, z), circle in zip([(v.x, v.y, v.z) for v in positions], circles):
+            circle.center = (x, y)
+        return circles
+
+    anim = FuncAnimation(fig, next_frame, interval=dt, blit=True, init_func=init)
+    try:
+        pl.show()
+    except:  # in true python style, ignore weird Tk error when closing plot window
+        pass
+    pl.clf()  # may not be necessary
+
 
 
 if __name__ == '__main__':
