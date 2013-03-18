@@ -5,6 +5,7 @@ import ContainerInitializer
 
 import numpy as np
 import matplotlib.pyplot as plt
+import math
 
 FRAME_RATE = 10
 DELTA_T = 0.01
@@ -33,8 +34,9 @@ pe_list = []
 ke_list = []
 pressure_list = []
 
-f_x_list = [0.]
-v_x_list = [0.]
+f_x_list = []
+v_x_list = []
+avg_vx_list = []
 
 count = 1
 
@@ -56,8 +58,9 @@ while count < NUM_TIMESTEPS:
     #print "--------- BEGIN TIMESTEP " + str(count) + " --------------"
     i.integrate(DELTA_T * count)
 
-    f_x_list.append(f.aX(DELTA_T * count).x)
-    v_x_list.append(c.v[-1].x)
+    #f_x_list.append(f.aX(DELTA_T * count).x)
+    #v_x_list.append(c.v[-1].x)
+    avg_vx_list.append(c.avg_sled_v_x())
     print "timeunit: " + str(DELTA_T*count)
     #i.cheat_i()
     #pe_list.append(f.pe())
@@ -75,8 +78,33 @@ while count < NUM_TIMESTEPS:
     #c.Lx -= 0.01
     #c.Ly -= 0.01
 
-    #if count % FRAME_RATE == 0:
-        #print "c.x"
+    if count % FRAME_RATE == 0:
+        time = np.linspace(0, count*DELTA_T, count)
+
+        #print "len time: " + str(len(time))
+        #print "len f_xlist" + str(len(f_x_list))
+        #print f_x_list
+
+        #print "-------"
+        #print v_x_list
+
+        #plt.clf()
+        #plt.plot(time, f_x_list)
+        #plt.ylabel('Pulling Force')
+        #plt.xlabel('Time Units')
+        #plt.title('Pulling Force_x Due To Spring On Right Most Atom In Sled, k=10')
+        #plt.savefig('f_x_heracles_k10.png')
+        #plt.show()
+
+        plt.clf()
+        plt.plot(time, avg_vx_list)
+        plt.ylabel('Velocity')
+        plt.xlabel('Time Units')
+        plt.title('Avg Velocity_x Of All Sled Atoms, F_x k=10')
+        plt.savefig('avg_v_x_heracles_k10.png')
+        #plt.show()
+
+#print "c.x"
         #print c.x
         #print "c.y"
         #print c.y
@@ -103,7 +131,7 @@ while count < NUM_TIMESTEPS:
         #plt.show()
     count += 1
 
-time = np.linspace(0, NUM_TIMESTEPS*DELTA_T, NUM_TIMESTEPS)
+#time = np.linspace(0, NUM_TIMESTEPS*DELTA_T, NUM_TIMESTEPS)
 
 print "len time: " + str(len(time))
 print "len f_xlist" + str(len(f_x_list))
@@ -112,21 +140,6 @@ print f_x_list
 print "-------"
 print v_x_list
 
-plt.clf()
-plt.plot(time, f_x_list)
-plt.ylabel('Pulling Force')
-plt.xlabel('Time Units')
-plt.title('Pulling Force_x Due To Spring On Right Most Atom In Sled')
-plt.savefig('f_x_heracles.png')
-plt.show(block=True)
-
-plt.clf()
-plt.plot(time, v_x_list)
-plt.ylabel('Velocity')
-plt.xlabel('Time Units')
-plt.title('Velocity_x Of Right Most Atom In Sled')
-plt.savefig('v_x_heracles.png')
-plt.show(block=True)
 #print "time:"
 #print time
 #print "---------"

@@ -91,7 +91,7 @@ class Force(object):
         #x = p[cFloor].x
 
         #print "aX: "
-        #print str(Vector_3D(100 * (0.1 * t - (p.x - self.c.xInit)), 0., 0.))
+        #print str(Vector_3D(10 * (0.1 * t - (p.x - self.c.xInit)), 0., 0.))
         return Vector_3D(100 * (0.1 * t - (p.x - self.c.xInit)), 0., 0.)
     	
     # acceleration due to dragging force

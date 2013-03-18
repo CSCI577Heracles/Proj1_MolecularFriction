@@ -79,3 +79,10 @@ class Container(object):
         ptemp = np.tile(self.p[self.cFloor:], (self.p.size - self.cFloor, 1))
         dtemp = self.vBounds(ptemp.T - ptemp)
         return self.vR_mag_calc(dtemp)
+
+    def avg_sled_v_x(self):
+        n = np.size(self.v[self.cFloor:])
+        accum = 0.
+        for vector3d in self.v[self.cFloor:]:
+            accum += vector3d.x
+        return accum / n
