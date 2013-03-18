@@ -117,7 +117,7 @@ plt.plot(time, f_x_list)
 plt.ylabel('Pulling Force')
 plt.xlabel('Time Units')
 plt.title('Pulling Force_x Due To Spring On Right Most Atom In Sled')
-plt.savefig('f_x_heracles.png')
+#plt.savefig('f_x_heracles.png')
 plt.show(block=True)
 
 plt.clf()
@@ -125,7 +125,7 @@ plt.plot(time, v_x_list)
 plt.ylabel('Velocity')
 plt.xlabel('Time Units')
 plt.title('Velocity_x Of Right Most Atom In Sled')
-plt.savefig('v_x_heracles.png')
+#plt.savefig('v_x_heracles.png')
 plt.show(block=True)
 #print "time:"
 #print time
