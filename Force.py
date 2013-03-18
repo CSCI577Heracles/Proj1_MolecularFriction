@@ -78,8 +78,8 @@ class Force(object):
         f = r_hat * (24 * eps) / dr * (2 * (sig / dr) ** 12 - (sig / dr) ** 6)
         f = self.c.vRmNan(f)
 
-        print "aLJ: "
-        print np.sum(f, axis=1) / m
+        #print "aLJ: "
+        #print np.sum(f, axis=1) / m
         return np.sum(f, axis=1) / m
         
     # acceleration due to pulling force
@@ -90,8 +90,8 @@ class Force(object):
         p = self.c.p[-1]  # only want the cFloorth index :/
         #x = p[cFloor].x
 
-        print "aX: "
-        print str(Vector_3D(100 * (0.1 * t - (p.x - self.c.xInit)), 0., 0.))
+        #print "aX: "
+        #print str(Vector_3D(100 * (0.1 * t - (p.x - self.c.xInit)), 0., 0.))
         return Vector_3D(100 * (0.1 * t - (p.x - self.c.xInit)), 0., 0.)
     	
     # acceleration due to dragging force
@@ -103,8 +103,8 @@ class Force(object):
         v = self.c.v[self.c.cFloor]
         dr = p.magnitude()  # TODO I have no idea what this dr is supposed to be
 
-        print "aD:"
-        print Vector_3D(-10 * (v.x * x + v.y * y) / dr, 0., 0.)
+        #print "aD:"
+        #print Vector_3D(-10 * (v.x * x + v.y * y) / dr, 0., 0.)
         return Vector_3D(-10 * (v.x * x + v.y * y) / dr, 0., 0.)  # divide by mass as well here
 
     # acceleration due to spring force
@@ -112,8 +112,8 @@ class Force(object):
         #tempa = (self.c.d_sled() - Vector_3D(2 * a, 2 * a, 0.)) * -500
         tempa = (self.c.d_sled() - self.c.springMatrix) * -500
         tempa = tempa * self.c.sledMatrix
-        print "aS:"
-        print np.sum(tempa, axis=1) / self.c.m[self.c.cFloor:]
+        #print "aS:"
+        #print np.sum(tempa, axis=1) / self.c.m[self.c.cFloor:]
         return np.sum(tempa, axis=1) / self.c.m[self.c.cFloor:]
 
     def a(self, t):

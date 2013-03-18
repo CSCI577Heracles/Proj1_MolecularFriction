@@ -9,7 +9,6 @@ import random
 
 class ContainerInitializer(object):
 
-
     def __init__(self, init_string):
         c = Container.Container()
         Lx = 10.
