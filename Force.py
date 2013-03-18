@@ -105,7 +105,7 @@ class Force(object):
 
         #print "aD:"
         #print Vector_3D(-10 * (v.x * x + v.y * y) / dr, 0., 0.)
-        return Vector_3D(-10 * (v.x * x + v.y * y) / dr, 0., 0.)  # divide by mass as well here
+        return Vector_3D(-10. * v.x * x / dr, -10. * v.y * y / dr, 0.)  # divide by mass as well here
 
     # acceleration due to spring force
     def aS(self, a=2 ** (1 / 6.)):
