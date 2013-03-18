@@ -31,12 +31,12 @@ def show_positions(positions, dt, num_forward_frames, frame_show_modulus=1,  sav
     :type positions: list of nparray of Vector3D
     """
     particle_radius = 2**(1.0/6)
-    figsize = (12, 2)
+    figsize = (12, 6)
     plot_title = 'Molec Dyn Friction Simulation'
 
     also_run_backwards = False
     save_animation = bool(save_file_path)
-    ##num_forward_frames = 10 * 50
+    num_forward_frames = len(positions)  #NOTE: overriding input
 ##    frame_show_modulus = 10  # only show every nth frame
     ##dt = 1e-2
 
@@ -67,6 +67,13 @@ def show_positions(positions, dt, num_forward_frames, frame_show_modulus=1,  sav
         e = get_nice_circle(x, y, 0.5*particle_radius)
         circles.append(ax.add_patch(e))
 
+    # init fn seems to prevent 'ghosting' of first-plotted data
+    def init():
+        """initialize animation"""
+        for c in circles:
+            c.center = (-1, -1)  # hide (hopefully) off-screen
+        return circles
+
     def next_frame(ix_frame):
         ix_frame *= frame_show_modulus
         xs = axs[ix_frame]
@@ -86,7 +93,7 @@ def show_positions(positions, dt, num_forward_frames, frame_show_modulus=1,  sav
     if also_run_backwards:
         num_total_frames += num_forward_frames
     frames = int(num_total_frames / frame_show_modulus)
-    anim = FuncAnimation(fig, next_frame, frames=frames, interval=dt, blit=True)
+    anim = FuncAnimation(fig, next_frame, frames=frames, interval=dt, blit=True, init_func=init)
     if save_animation:
         anim.save(save_file_path + '.avi', fps=30)
     try:

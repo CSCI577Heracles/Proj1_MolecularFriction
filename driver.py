@@ -8,9 +8,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import math
 
-FRAME_RATE = 10
-DELTA_T = 0.01
-NUM_TIMESTEPS = 100
+FRAME_RATE = 1
+DELTA_T = 0.05
+NUM_TIMESTEPS = 10
 
 
 def circle(xy, radius, color="lightsteelblue", facecolor="green", alpha=.6, ax=None):
@@ -99,12 +99,12 @@ while count < NUM_TIMESTEPS:
         #plt.savefig('f_x_heracles_k10.png')
         #plt.show()
 
-        plt.clf()
-        plt.plot(time, avg_vx_list)
-        plt.ylabel('Velocity')
-        plt.xlabel('Time Units')
-        plt.title('Avg Velocity_x Of All Sled Atoms, F_x k=10')
-        plt.savefig('avg_v_x_heracles_k10.png')
+        #plt.clf()
+        #plt.plot(time, avg_vx_list)
+        #plt.ylabel('Velocity')
+        #plt.xlabel('Time Units')
+        #plt.title('Avg Velocity_x Of All Sled Atoms, F_x k=10')
+        #plt.savefig('avg_v_x_heracles_k10.png')
         #plt.show()
 
 #print "c.x"
@@ -182,4 +182,5 @@ print v_x_list
 # plt.savefig('prob3_pressure.png')
 # plt.show(block=True)
 
+print 'Starting animation'
 Animation.show_positions(positions, DELTA_T, NUM_TIMESTEPS, FRAME_RATE)
