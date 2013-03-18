@@ -10,7 +10,7 @@ import math
 
 FRAME_RATE = 10
 DELTA_T = 0.01
-NUM_TIMESTEPS = 5000
+NUM_TIMESTEPS = 100
 
 
 def circle(xy, radius, color="lightsteelblue", facecolor="green", alpha=.6, ax=None):
@@ -182,4 +182,4 @@ print v_x_list
 # plt.savefig('prob3_pressure.png')
 # plt.show(block=True)
 
-Animation.show_positions(positions)
+Animation.show_positions(positions, DELTA_T, NUM_TIMESTEPS, FRAME_RATE)

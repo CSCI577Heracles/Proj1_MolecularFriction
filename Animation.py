@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 from __future__ import division
-##from scipy.integrate import odeint  # for integrate.odeint
 import numpy as np
 import pylab as pl
-import math
+##import math
 ##import unittest
 ##import itertools
 ##from pprint import pprint, pformat
@@ -11,48 +10,73 @@ import math
 from matplotlib.animation import FuncAnimation  # v1.1+
 
 
-def show_positions(positions, save_file_path=None):
+# Circle code courtesy of Kevin Joyce
+def get_nice_circle(x, y, radius, color="lightsteelblue", facecolor="green", alpha=0.6, ax=None):
+    """ add a circle to ax or current axes
+    """
+    e = pl.Circle([x, y], radius)
+    if ax is None:
+        ax = pl.gca()
+    ax.add_artist(e)
+    e.set_clip_box(ax.bbox)
+    e.set_edgecolor( color )
+    e.set_linewidth(3)
+    e.set_facecolor( facecolor )  # "none" not None
+    e.set_alpha( alpha )
+    return e
+
+
+def show_positions(positions, dt, num_forward_frames, frame_show_modulus=1,  save_file_path=None):
     """
     :type positions: list of nparray of Vector3D
     """
-    print "show_positions isn't implemented yet"
-    return
-##    also_run_backwards = True
+    particle_radius = 2**(1.0/6)
+    figsize = (12, 2)
+    plot_title = 'Molec Dyn Friction Simulation'
+
+    also_run_backwards = False
     save_animation = bool(save_file_path)
     ##num_forward_frames = 10 * 50
-    ##frame_show_modulus = 10  # only show every nth frame
+##    frame_show_modulus = 10  # only show every nth frame
     ##dt = 1e-2
 
+    lxs, lys = [], []  # 'l' prefix means 'list'
+    for p in positions:
+        xs, ys = [], []
+        for v in p:  # vectors
+            xs.append(v.x)
+            ys.append(v.y)
+        lxs.append(xs)
+        lys.append(ys)
+    axs = np.array(lxs)  # 'a' prefix for 'array'
+    ays = np.array(lys)
 
-    # Animate orbit
-    # Code courtesy of George Lesica
-    fig = pl.figure(figsize=(4, 4))
-    xlim, ylim = TODO
-    ax = pl.axes(xlim=(0, xlim), ylim=(0, ylim))  # necessary because initial plot is too zoomed in
-    ax.set_aspect('equal')
-    ax.set_xlim((0, init_container.bounds[0]))
-    ax.set_ylim((0, init_container.bounds[1]))
-    pl.title('Molec Dyn Simulation', fontsize=16)
+    xlim = (0, 20)  # (np.min(axs)-1, np.max(axs)+1)
+    ylim = (0, 8)  # (np.min(ays)-1, np.max(ays)+1)
+
+    fig = pl.figure(figsize=figsize)
+    ax = pl.axes(xlim=xlim, ylim=ylim)  # necessary because initial plot is too zoomed in
+    ax.set_aspect('equal')  # NOTE: This can make the plot look squished if figsize isn't wide enough
+    pl.title(plot_title, fontsize=16)
     pl.xlabel('X Position')
     pl.ylabel('Y Position')
 
-
     ## (Kevin) Pre initializing is necessary I guess
-    posns = init_container.positions
     circles = []
-    for i,posn in enumerate(posns):
-        e = moldyn.get_nice_circle(posn[0], posn[1], 0.5*particle_radius)
+    for x, y in zip(axs[0], ays[0]):  # initial positions
+        e = get_nice_circle(x, y, 0.5*particle_radius)
         circles.append(ax.add_patch(e))
 
     def next_frame(ix_frame):
         ix_frame *= frame_show_modulus
-        posns = containers[ix_frame].positions
+        xs = axs[ix_frame]
+        ys = ays[ix_frame]
         facecolor = 'green'
         if also_run_backwards and ix_frame > num_forward_frames:
             facecolor = 'purple'
-        for i,circle in zip(xrange(init_container.num_particles), circles):
-            circle.center = (posns[i][0], posns[i][1])  # x and y
-            if i in special_particles:
+        for i,circle in zip(xrange(len(xs)), circles):
+            circle.center = (xs[i], ys[i])
+            if False:  #i in special_particles:
                 circle.set_facecolor('blue')
             else:
                 circle.set_facecolor(facecolor)
@@ -64,14 +88,12 @@ def show_positions(positions, save_file_path=None):
     frames = int(num_total_frames / frame_show_modulus)
     anim = FuncAnimation(fig, next_frame, frames=frames, interval=dt, blit=True)
     if save_animation:
-        anim.save('pat_mol_dyn_{}_animation.avi'.format(sim_name), fps=30)
+        anim.save(save_file_path + '.avi', fps=30)
     try:
-        if show_animation:
-            pl.show()
-        else:
-            pl.clf()
+        pl.show()
     except:  # in true python style, ignore weird Tk error when closing plot window
         pass
+    pl.clf()  # may not be necessary
 
 
 
